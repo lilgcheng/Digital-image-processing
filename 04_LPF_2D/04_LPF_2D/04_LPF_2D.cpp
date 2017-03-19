@@ -10,11 +10,10 @@
 #include "bmp.cpp"
 #define mask 9
 #define count 1
-using namespace std;
 int R[MaxBMPSizeX][MaxBMPSizeY];
 int G[MaxBMPSizeX][MaxBMPSizeY];
 int B[MaxBMPSizeX][MaxBMPSizeY];
-
+using namespace std;
 int gray[1024][1024];
 void img_to_gray(int h, int w);
 int main(int argc, _TCHAR* argv[])
