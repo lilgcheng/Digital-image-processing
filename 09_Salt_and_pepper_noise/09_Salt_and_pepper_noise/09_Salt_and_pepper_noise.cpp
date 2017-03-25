@@ -12,7 +12,7 @@
 #include "bmp.cpp"
 #define mask 9
 #define count 1
-#define n 10000
+#define n 100000
 int R[MaxBMPSizeX][MaxBMPSizeY];
 int G[MaxBMPSizeX][MaxBMPSizeY];
 int B[MaxBMPSizeX][MaxBMPSizeY];

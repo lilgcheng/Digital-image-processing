@@ -41,9 +41,9 @@ int main(int argc, _TCHAR* argv[])
 	for (i = 0; i<length; i++){
 		for (j = 0; j<length; j++){
 			weightArr[i][j] = Getweight(j - blurRadius, blurRadius - i);
-			//printf("(%3d,%3d)  ",j-blurRadius,blurRadius-i);
+			printf("(%3d,%3d)  ",j-blurRadius,blurRadius-i);
 		}
-		//printf("\n");
+		printf("\n");
 	}
 	Printf_WeightArr();
 	Add_Arr();
