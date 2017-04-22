@@ -77,27 +77,27 @@ int main()
 		j=0;
 	}
 	save_bmp("lena_big.bmp", big, big, big);
-	
+//	
 	//水平方向內插 
 	for(x=1;x<width;x+=2){
 		for(y=0;y<height;y+=2){   
-			big[x][y] = (1-d)*big[x-1][y]+d*(big[x+1][y]); 
+			big[x][y] = big[x-1][y];
 		}
 	}
 	save_bmp("lena_big_hoz.bmp", big, big, big);
-	
+//	
 	//垂直方向內插 
 	for(x=0;x<width;x+=2){
 		for(y=1;y<height;y+=2){   
-			big[x][y] = (1-d)*big[x][y-1]+d*(big[x][y+1]); 
+			big[x][y] = big[x][y-1];
 		}
 	}
 	save_bmp("lena_big_ror.bmp", big, big, big);
-	
+//	
 	//垂直方向內插 (中間) (1,1)(1,3)... 
 	for(x=1;x<width;x+=2){
 		for(y=1;y<height;y+=2){   
-			big[x][y] = (1-d)*big[x][y-1]+d*(big[x][y+1]); 
+			big[x][y] = big[x-1][y];
 		}
 	}
 	save_bmp("lena_big_final.bmp", big, big, big);

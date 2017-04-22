@@ -26,7 +26,7 @@ int main(int argc, _TCHAR* argv[])
 {
 	int width, height;
 	int i, j,c;
-	open_bmp("lena-noise.bmp", R, G, B, width, height);
+	open_bmp("lena.bmp", R, G, B, width, height);
 	img_to_gray(width, height);
 	Produce_Weight_Arr();
 	for (int x = 0; x < width; x++) {

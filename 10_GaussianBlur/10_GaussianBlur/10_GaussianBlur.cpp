@@ -1,8 +1,4 @@
-﻿// 10_GaussianBlur.cpp : 定義主控台應用程式的進入點。
-//
 
-// 04_LPF_2D.cpp : ﹚竡北莱ノ祘Α秈翴
-//
 
 #include "stdafx.h"
 #include <stdlib.h>
@@ -47,7 +43,7 @@ int main(int argc, _TCHAR* argv[])
 	}
 	Printf_WeightArr();
 	Add_Arr();
-
+	printf("\n");
 	Final_weight();
 	Printf_WeightArr();
 
@@ -79,7 +75,7 @@ void img_to_gray(int h, int w){
 
 //得到權重傳回 
 double Getweight(int x, int y){
-	double sigma = 1.5;
+	double sigma = 2;
 	double weight = (1 / (2 * M_PI*sigma*sigma))*exp(((-(x*x + y*y)) / ((2 * sigma)*(sigma))));
 	return weight;
 }
@@ -102,7 +98,7 @@ void Add_Arr(){
 			sum += weightArr[i][j];
 		}
 	}
-	//printf("%f\n", sum);
+	printf("sum = %f\n", sum);
 }
 
 //使權重總合為1

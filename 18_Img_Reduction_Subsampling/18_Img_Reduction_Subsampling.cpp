@@ -1,86 +1,77 @@
-// 04_LPF_2D.cpp : 定義主控台應用程式的進入點。
-//
-
-#include "stdafx.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <iostream>
-#include <windows.h>
+#include <time.h>
 #include "bmp.h"
 #include "bmp.cpp"
-//#define mask 9
-//#define count 1
 #define blurRadius  1
 double weightArr[blurRadius * 2 + 1][blurRadius * 2 + 1] = { 1};
 double arr[blurRadius * 2 + 1][blurRadius * 2 + 1] = { 0 };
 double getBlurColor(int x, int y);
 void  getColorMatrix(int x, int y);
+using namespace std;
+int original[MaxBMPSizeX][MaxBMPSizeY]; // MaxBMPSizeX and MaxBMPSizeY are defined in "bmp.h"
+int histogram_equalization[MaxBMPSizeX][MaxBMPSizeY]; // MaxBMPSizeX and MaxBMPSizeY are defined in "bmp.h"
 int R[MaxBMPSizeX][MaxBMPSizeY];
 int G[MaxBMPSizeX][MaxBMPSizeY];
 int B[MaxBMPSizeX][MaxBMPSizeY];
-using namespace std;
+int r[1024][1024];
+int g[1024][1024];
+int b[1024][1024];
+
 int gray[1024][1024];
-int gray_copy[1024][1024];
-int hpf[1024][1024];
+int gray_lpf[1024][1024];
+int lpf[1024][1024];
+int small[1024][1024];
+
 void img_to_gray(int h, int w);
 void Produce_Weight_Arr();
-int main(int argc, _TCHAR* argv[])
+int main()
 {
+	double START, END;
 	int width, height;
-	int i, j,c;
-	open_bmp("lena.bmp", R, G, B, width, height);
-	img_to_gray(width, height);
+	int i=0, j=0;
+	int x, y;
+	
+	int a1,a2,a3,a4;
+	int d = 0.5;//水平距離
+	int b1,b2,b3,b4; 
+	START = clock();
+	open_bmp("lena.bmp", R, G, B, width, height); // for gray images
+	img_to_gray(width,height); 
+	save_bmp("lena_gray.bmp", gray, gray, gray);
 	Produce_Weight_Arr();
 	for (int x = 0; x < width; x++) {
 		for (int y = 0; y < height; y++) {
-			gray[x][y] = (int)getBlurColor(blurRadius + x, blurRadius + y);
-			
+			gray_lpf[x][y] = (int)getBlurColor(blurRadius + x, blurRadius + y);
 		}
 	}
-
-	//printf("%f", (double)1 / (double)9));
-	/*for ( i = 0; i < 3; i++)
-	{
-		for (j = 0; j < 3; j++){
-			printf("%f", weightArr[i][j]);
+	//原點訂於圖片正中央，將外圍反白 
+	for(x=0;x<width;x+=2){
+		for(y=0;y<height;y+=2){
+			small[i][j] = gray_lpf[x][y];
+			j++;
 		}
-		printf("\n");
-	}*/
-	/*for (c = 0; c < count; c++){
-		for (i = 1; i < height - 1; i++){
-			for (j = 1; j < width - 1; j++){
-				gray[i][j] = 
-					  (gray[i - 1][j - 1] / mask) + (gray[i][j - 1] / mask) + (gray[i + 1][j - 1] / mask)
-					+ (gray[i - 1][j + 0] / mask) + (gray[i][j + 0] / mask) + (gray[i + 1][j + 0] / mask)
-					+ (gray[i - 1][j + 1] / mask) + (gray[i][j + 1] / mask) + (gray[i + 1][j + 1] / mask);
-			}
-		}
-	}*/
-	
-	save_bmp("lena_LPF_3X3.bmp", gray, gray, gray);
-	
-	for(i=0;i<height;i++){
-		for(j=0;j<width;j++){
-			hpf[i][j] = gray_copy[i][j] - gray[i][j];
-		}
+		i++;
+		j=0;
 	}
-	save_bmp("lena_HPF_3X3.bmp", hpf, hpf, hpf);
-	printf("finish\n");
-
+	save_bmp("lena_small_add_lpf.bmp", small, small, small);
 	close_bmp();
+	END = clock();
+	printf("進行運算所花費的時間：%f S\n", (END - START) / CLOCKS_PER_SEC);
 	system("pause");
 	return 0;
 }
 
-void img_to_gray(int h, int w){
+void img_to_gray(int w, int h){
 	int i, j;
 	for (i = 0; i < w; i++){
 		for (j = 0; j < h; j++){
 			gray[i][j] = ((int)((0.299*R[i][j] + 0.587*G[i][j] + 0.114*B[i][j]) * 1000) / 1000);
-			gray_copy[i][j] = gray[i][j];
+//			gray_copy[i][j] = gray[i][j];
 		}
 	}
-} 
+}
 
 void Produce_Weight_Arr(){
 	double weightArr[blurRadius * 2 + 1][blurRadius * 2 + 1];
